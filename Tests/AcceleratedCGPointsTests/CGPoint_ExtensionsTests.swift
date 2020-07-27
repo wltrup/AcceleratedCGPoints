@@ -1,7 +1,7 @@
 import XCTest
 @testable import AcceleratedCGPoints
 
-final class CGPoint_AdditiveArithmeticTests: XCTestCase {
+final class CGPoint_ExtensionsTests: XCTestCase {
 
     var p1 = CGPoint.zero
     var p2 = CGPoint.zero
@@ -57,7 +57,23 @@ final class CGPoint_AdditiveArithmeticTests: XCTestCase {
         XCTAssertEqual(res, exp)
     }
 
-    func test_scale() {
+    func test_scale_Double() {
+        let exp = CGPoint(
+            x: s * p1.x,
+            y: s * p1.y
+        )
+        var res = p1
+        res.scale(by: Double(s))
+        XCTAssertEqual(res, exp)
+    }
+
+    func test_magnitudeSquared() {
+        let exp = (p1.x * p1.x) + (p1.y * p1.y)
+        let res = p1.magnitudeSquared
+        XCTAssertEqual(res, Double(exp))
+    }
+
+    func test_scale_CGFloat() {
         let exp = CGPoint(
             x: s * p1.x,
             y: s * p1.y
@@ -67,13 +83,7 @@ final class CGPoint_AdditiveArithmeticTests: XCTestCase {
         XCTAssertEqual(res, exp)
     }
 
-    func test_magnitudeSquared() {
-        let exp = (p1.x * p1.x) + (p1.y * p1.y)
-        let res = p1.magnitudeSquared
-        XCTAssertEqual(res, exp)
-    }
-
-    func test_scalar_times_point() {
+    func test_scalar_times_point_CGFloat() {
         let exp = CGPoint(
             x: s * p1.x,
             y: s * p1.y
@@ -82,13 +92,32 @@ final class CGPoint_AdditiveArithmeticTests: XCTestCase {
         XCTAssertEqual(res, exp)
     }
 
-    func test_scalar_timesEqual_point() {
+    func test_scalar_times_point_Double() {
+        let exp = CGPoint(
+            x: s * p1.x,
+            y: s * p1.y
+        )
+        let res = Double(s) * p1
+        XCTAssertEqual(res, exp)
+    }
+
+    func test_scalar_timesEqual_point_CGFloat() {
         let exp = CGPoint(
             x: s * p1.x,
             y: s * p1.y
         )
         var res = p1
         res *= s
+        XCTAssertEqual(res, exp)
+    }
+
+    func test_scalar_timesEqual_point_Double() {
+        let exp = CGPoint(
+            x: s * p1.x,
+            y: s * p1.y
+        )
+        var res = p1
+        res *= Double(s)
         XCTAssertEqual(res, exp)
     }
 

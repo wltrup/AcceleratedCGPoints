@@ -21,17 +21,49 @@ extension CGPoint: AdditiveArithmetic {
     public static func -= (lhs: inout CGPoint, rhs: CGPoint)
 
 }
+```
 
+- a conformance of `CGPoint` to `VectorArithmetic`, to support multiplication of points by scalars:
+```swift
+extension CGPoint: VectorArithmetic {
+
+    // Multiplication of a (Double) scalar and a point.
+    public mutating func scale(by rhs: Double)
+
+    public var magnitudeSquared: Double
+
+}
+```
+
+- an extension of `CGPoint`, adding some convenience functions to go along with the conformance to `VectorArithmetic`:
+```swift
 extension CGPoint {
 
-    public var magnitudeSquared: CGFloat
-
-    // Multiplication of a scalar and a point.
+    // Multiplication of a (CGFloat) scalar and a point.
     public mutating func scale(by rhs: CGFloat)
 
     // Equivalent to `scale(by:)` above.
     public static func * (lhs: CGFloat, rhs: CGPoint) -> CGPoint
-    public static func *= (lhs: inout CGPoint, rhs: CGFloat)
+    public static func * (lhs: Double, rhs: CGPoint) -> CGPoint
+
+    // Equivalent to `scale(by:)` above.
+    public static func *= (lhs: inout CGPointCGPoint, rhs: CGFloat)
+    public static func *= (lhs: inout CGPointCGPoint, rhs: Double)
+
+}
+```
+
+- another extension of `CGPoint`, adding support for creating uniformly-distributed pseudo-random points:
+```swift
+extension CGPoint {
+
+    // Same range for both components.
+    static func random(in range: ClosedRange<CGFloat>) -> CGPoint
+    static func random(in range: ClosedRange<Double>) -> CGPoint
+
+    // A separate range for each component.
+    static func random(xRange: ClosedRange<CGFloat>, yRange: ClosedRange<CGFloat>) -> CGPoint
+    static func random(xRange: ClosedRange<Double>, yRange: ClosedRange<Double>) -> CGPoint
 
 }
 ```
@@ -57,9 +89,9 @@ extension Array: AdditiveArithmetic where Element == CGPoint {
 
 }
 
+// Multiplication of a single scalar and an array of points.
 extension Array: VectorArithmetic where Element == CGPoint {
 
-    // Multiplication of a single scalar and an array of points.
     // Does nothing if `self` is an empty array.
     public mutating func scale(by rhs: Double)
 
