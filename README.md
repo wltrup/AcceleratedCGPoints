@@ -142,42 +142,42 @@ extension Array where Element == CGPoint {
 
 Typical results when comparing the speeds of these operations (on an old 2012 MacBook Pro) against typical `forEach` or `map` implementations, on arrays of 1_000_000 points, appear below:
 
-### `+`
+#### `+`
 - time per point (standard approach): 1.6e-06 seconds
 - time per point (accelerated approach): 1.2e-08 seconds
 - accelerated 129 times faster than standard
 
-### `+=`
+#### `+=`
 - time per point (standard approach): 1.2e-06 seconds
 - time per point (accelerated approach): 1.6e-08 seconds
 - accelerated 74 times faster than standard
 
-### `-`
+#### `-`
 - time per point (standard approach): 1.5e-06 seconds
 - time per point (accelerated approach): 8.6e-09 seconds
 - accelerated 174 times faster than standard
 
-### `-=`
+#### `-=`
 - time per point (standard approach): 2.0e-06 seconds
 - time per point (accelerated approach): 2.3e-08 seconds
 - accelerated 88 times faster than standard
 
-### `scale`
+#### `scale`
 - time per point (standard approach): 3.3e-07 seconds
 - time per point (accelerated approach): 4.4e-09 seconds
 - accelerated 75 times faster than standard
 
-### `magnitudeSquared`
+#### `magnitudeSquared`
 - time per point (standard approach): 6.3e-07 seconds
 - time per point (accelerated approach): 1.2e-08 seconds
 - accelerated 54 times faster than standard
 
-### `scale(by:thenAdd:)`
+#### `scale(by:thenAdd:)`
 - time per point (standard approach): 3.2e-07 seconds
 - time per point (accelerated approach): 2.8e-08 seconds
 - accelerated 12 times faster than standard
 
-### `scale(by:thenSubtract:)`
+#### `scale(by:thenSubtract:)`
 - time per point (standard approach): 3.6e-07 seconds
 - time per point (accelerated approach): 2.8e-08 seconds
 - accelerated 13 times faster than standard
