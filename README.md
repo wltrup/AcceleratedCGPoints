@@ -7,17 +7,17 @@
 
 ## What
 
-**AcceleratedCGPoints** is a Swift Package Manager library for iOS/tvOS (10.3 and above), watchOS (6.0 and above), and macOS (10.15 and above), under Swift 5.2 and above, providing
+**AcceleratedCGPoints** is a Swift Package Manager library for iOS/tvOS (13.0 and above), watchOS (6.0 and above), and macOS (10.15 and above), under Swift 5.2 and above, providing
 
 - a conformance of `CGPoint` to `AdditiveArithmetic`, to support direct arithmetic operations on points:
 ```swift
 extension CGPoint: AdditiveArithmetic {
 
-    public static func + (lhs: Self, rhs: Self) -> Self
-    public static func += (lhs: inout Self, rhs: Self)
+    public static func + (lhs: CGPoint, rhs: CGPoint) -> CGPoint
+    public static func += (lhs: inout CGPoint, rhs: CGPoint)
     
-    public static func - (lhs: Self, rhs: Self) -> Self
-    public static func -= (lhs: inout Self, rhs: Self)
+    public static func - (lhs: CGPoint, rhs: CGPoint) -> CGPoint
+    public static func -= (lhs: inout CGPoint, rhs: CGPoint)
 
 }
 
@@ -26,8 +26,8 @@ extension CGPoint {
     public mutating func scale(by rhs: CGFloat)
     public var magnitudeSquared: CGFloat
 
-    public static func * (lhs: CGFloat, rhs: Self) -> Self
-    public static func *= (lhs: inout Self, rhs: CGFloat)
+    public static func * (lhs: CGFloat, rhs: CGPoint) -> CGPoint
+    public static func *= (lhs: inout CGPoint, rhs: CGFloat)
 
 }
 ```
@@ -42,13 +42,13 @@ extension Array: AdditiveArithmetic where Element == CGPoint {
 
     // Returns an empty array if the arguments are empty arrays.
     // **NOTE**: crashes if the arguments are of different lengths.
-    public static func + (lhs: Self, rhs: Self) -> Self
-    public static func - (lhs: Self, rhs: Self) -> Self
+    public static func + (lhs: [CGPoint], rhs: [CGPoint]) -> [CGPoint]
+    public static func - (lhs: [CGPoint], rhs: [CGPoint]) -> [CGPoint]
 
     // Does nothing if the arguments are empty arrays.
     // **NOTE**: crashes if the arguments are of different lengths.
-    public static func += (lhs: inout Self, rhs: Self)
-    public static func -= (lhs: inout Self, rhs: Self)
+    public static func += (lhs: inout [CGPoint], rhs: [CGPoint])
+    public static func -= (lhs: inout [CGPoint], rhs: [CGPoint])
 
 }
 
@@ -68,12 +68,12 @@ extension Array where Element == CGPoint {
     public mutating func scale(by rhs: CGFloat)
 
     // Does nothing if `rhs` is an empty array.
-    public static func * (lhs: CGFloat, rhs: Self) -> Self
-    public static func * (lhs: Double,  rhs: Self) -> Self
+    public static func * (lhs: CGFloat, rhs: [CGPoint]) -> [CGPoint]
+    public static func * (lhs: Double,  rhs: [CGPoint]) -> [CGPoint]
 
     // Does nothing if `lhs` is an empty array.
-    public static func *= (lhs: inout Self, rhs: CGFloat)
-    public static func *= (lhs: inout Self, rhs: Double)
+    public static func *= (lhs: inout [CGPoint], rhs: CGFloat)
+    public static func *= (lhs: inout [CGPoint], rhs: Double)
 
     // Performs the operations
     //
