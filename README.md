@@ -11,11 +11,12 @@
 
 - a conformance of `CGPoint` to `AdditiveArithmetic`, to support direct arithmetic operations on points:
 ```swift
+// Addition and subtraction of points.
 extension CGPoint: AdditiveArithmetic {
 
     public static func + (lhs: CGPoint, rhs: CGPoint) -> CGPoint
     public static func += (lhs: inout CGPoint, rhs: CGPoint)
-    
+
     public static func - (lhs: CGPoint, rhs: CGPoint) -> CGPoint
     public static func -= (lhs: inout CGPoint, rhs: CGPoint)
 
@@ -23,10 +24,12 @@ extension CGPoint: AdditiveArithmetic {
 
 extension CGPoint {
 
-    public mutating func scale(by rhs: CGFloat)
     public var magnitudeSquared: CGFloat
 
     // Multiplication of a scalar and a point.
+    public mutating func scale(by rhs: CGFloat)
+
+    // Equivalent to `scale(by:)` above.
     public static func * (lhs: CGFloat, rhs: CGPoint) -> CGPoint
     public static func *= (lhs: inout CGPoint, rhs: CGFloat)
 
@@ -36,6 +39,7 @@ extension CGPoint {
 - extensions to `Array`, to support accelerated arithmetic on large `CGPoint` arrays, using Apple's `Accelerate` framework
 
 ```swift
+// Addition and subtraction of arrays of points.
 extension Array: AdditiveArithmetic where Element == CGPoint {
 
     // NOTE: `.zero` is an array of length 1.
@@ -55,6 +59,7 @@ extension Array: AdditiveArithmetic where Element == CGPoint {
 
 extension Array: VectorArithmetic where Element == CGPoint {
 
+    // Multiplication of a single scalar and an array of points.
     // Does nothing if `self` is an empty array.
     public mutating func scale(by rhs: Double)
 
@@ -69,11 +74,13 @@ extension Array where Element == CGPoint {
     public mutating func scale(by rhs: CGFloat)
 
     // Multiplication of a single scalar and an array of points.
+    // Equivalent to `scale(by:)` above.
     // Does nothing if `rhs` is an empty array.
     public static func * (lhs: CGFloat, rhs: [CGPoint]) -> [CGPoint]
     public static func * (lhs: Double,  rhs: [CGPoint]) -> [CGPoint]
 
     // Multiplication of a single scalar and an array of points.
+    // Equivalent to `scale(by:)` above.
     // Does nothing if `lhs` is an empty array.
     public static func *= (lhs: inout [CGPoint], rhs: CGFloat)
     public static func *= (lhs: inout [CGPoint], rhs: Double)
@@ -89,7 +96,7 @@ extension Array where Element == CGPoint {
     //
     // Returns an empty array if `points` is an empty array.
     //
-    public static func scale(_ points: [CGPoint], by s: CGPoint, thenAdd q: CGPoint) -> [CGPoint] 
+    public static func scale(_ points: [CGPoint], by s: CGPoint, thenAdd q: CGPoint) -> [CGPoint]
 
     // Performs the operations
     //
@@ -102,7 +109,7 @@ extension Array where Element == CGPoint {
     //
     // Returns an empty array if `points` is an empty array.
     //
-    public static func scale(_ points: [CGPoint], by s: CGPoint, thenSubtract q: CGPoint) -> [CGPoint] 
+    public static func scale(_ points: [CGPoint], by s: CGPoint, thenSubtract q: CGPoint) -> [CGPoint]
 
     // Performs (in place) the operations
     //
@@ -114,7 +121,7 @@ extension Array where Element == CGPoint {
     //
     // Does nothing if `self` is an empty array.
     //
-    public mutating func scale(by s: CGPoint, thenAdd q: CGPoint) 
+    public mutating func scale(by s: CGPoint, thenAdd q: CGPoint)
 
     // Performs (in place) the operations
     //
@@ -126,7 +133,7 @@ extension Array where Element == CGPoint {
     //
     // Does nothing if `self` is an empty array.
     //
-    public mutating func scale(by s: CGPoint, thenSubtract q: CGPoint) 
+    public mutating func scale(by s: CGPoint, thenSubtract q: CGPoint)
 
 }
 ```
@@ -135,37 +142,45 @@ extension Array where Element == CGPoint {
 
 Typical results when comparing the speeds of these operations (on an old 2012 MacBook Pro) against typical `forEach` or `map` implementations, on arrays of 1_000_000 points, appear below:
 
-- `+`  time per point (standard approach): 1.6e-06 seconds
-- `+`  time per point (accelerated approach): 1.2e-08 seconds
-- `+`  accelerated 129 times faster than standard
+### `+`
+- time per point (standard approach): 1.6e-06 seconds
+- time per point (accelerated approach): 1.2e-08 seconds
+- accelerated 129 times faster than standard
 
-- `+=` time per point (standard approach): 1.2e-06 seconds
-- `+=` time per point (accelerated approach): 1.6e-08 seconds
-- `+=` accelerated 74 times faster than standard
+### `+=`
+- time per point (standard approach): 1.2e-06 seconds
+- time per point (accelerated approach): 1.6e-08 seconds
+- accelerated 74 times faster than standard
 
-- `-`  time per point (standard approach): 1.5e-06 seconds
-- `-`  time per point (accelerated approach): 8.6e-09 seconds
-- `-`  accelerated 174 times faster than standard
+### `-`
+- time per point (standard approach): 1.5e-06 seconds
+- time per point (accelerated approach): 8.6e-09 seconds
+- accelerated 174 times faster than standard
 
-- `-=` time per point (standard approach): 2.0e-06 seconds
-- `-=` time per point (accelerated approach): 2.3e-08 seconds
-- `-=` accelerated 88 times faster than standard
+### `-=`
+- time per point (standard approach): 2.0e-06 seconds
+- time per point (accelerated approach): 2.3e-08 seconds
+- accelerated 88 times faster than standard
 
-- `scale` time per point (standard approach): 3.3e-07 seconds
-- `scale` time per point (accelerated approach): 4.4e-09 seconds
-- `scale` accelerated 75 times faster than standard
+### `scale`
+- time per point (standard approach): 3.3e-07 seconds
+- time per point (accelerated approach): 4.4e-09 seconds
+- accelerated 75 times faster than standard
 
-- `magnitudeSquared` time per point (standard approach): 6.3e-07 seconds
-- `magnitudeSquared` time per point (accelerated approach): 1.2e-08 seconds
-- `magnitudeSquared` accelerated 54 times faster than standard
+### `magnitudeSquared`
+- time per point (standard approach): 6.3e-07 seconds
+- time per point (accelerated approach): 1.2e-08 seconds
+- accelerated 54 times faster than standard
 
-- `scale(by:thenAdd:)` time per point (standard approach): 3.2e-07 seconds
-- `scale(by:thenAdd:)` time per point (accelerated approach): 2.8e-08 seconds
-- `scale(by:thenAdd:)` accelerated 12 times faster than standard
+### `scale(by:thenAdd:)`
+- time per point (standard approach): 3.2e-07 seconds
+- time per point (accelerated approach): 2.8e-08 seconds
+- accelerated 12 times faster than standard
 
-- `scale(by:thenSubtract:)` time per point (standard approach): 3.6e-07 seconds
-- `scale(by:thenSubtract:)` time per point (accelerated approach): 2.8e-08 seconds
-- `scale(by:thenSubtract:)` accelerated 13 times faster than standard
+### `scale(by:thenSubtract:)`
+- time per point (standard approach): 3.6e-07 seconds
+- time per point (accelerated approach): 2.8e-08 seconds
+- accelerated 13 times faster than standard
 
 ## Installation
 

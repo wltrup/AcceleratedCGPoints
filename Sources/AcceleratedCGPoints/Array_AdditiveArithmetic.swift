@@ -1,9 +1,10 @@
 import CoreGraphics
 import enum Accelerate.vDSP
 
+/// Addition and subtraction of arrays of points.
 extension Array: AdditiveArithmetic where Element == CGPoint {
 
-    /// **NOTE**: `.zero` is an array of **length 1**.
+    /// **NOTE**: `.zero` is an array of length 1.
     public static let zero: [CGPoint] = [.zero]
 
     /// Returns an empty array if the arguments are empty arrays.

@@ -3,6 +3,7 @@ import enum Accelerate.vDSP
 
 extension Array: VectorArithmetic where Element == CGPoint {
 
+    /// Multiplication of a single scalar and an array of points.
     /// Does nothing if `self` is an empty array.
     public mutating func scale(by rhs: Double) {
         if self.isEmpty { return }
@@ -32,6 +33,8 @@ extension Array where Element == CGPoint {
         self.scale(by: Double(rhs))
     }
 
+    /// Multiplication of a single scalar and an array of points.
+    /// Equivalent to `scale(by:)` above.
     /// Does nothing if `rhs` is an empty array.
     public static func * (lhs: CGFloat, rhs: Self) -> Self {
         if rhs.isEmpty { return rhs }
@@ -40,6 +43,8 @@ extension Array where Element == CGPoint {
         return res
     }
 
+    /// Multiplication of a single scalar and an array of points.
+    /// Equivalent to `scale(by:)` above.
     /// Does nothing if `rhs` is an empty array.
     public static func * (lhs: Double, rhs: Self) -> Self {
         if rhs.isEmpty { return rhs }
@@ -48,11 +53,15 @@ extension Array where Element == CGPoint {
         return res
     }
 
+    /// Multiplication of a single scalar and an array of points.
+    /// Equivalent to `scale(by:)` above.
     /// Does nothing if `lhs` is an empty array.
     public static func *= (lhs: inout Self, rhs: CGFloat) {
         lhs.scale(by: rhs)
     }
 
+    /// Multiplication of a single scalar and an array of points.
+    /// Equivalent to `scale(by:)` above.
     /// Does nothing if `lhs` is an empty array.
     public static func *= (lhs: inout Self, rhs: Double) {
         lhs.scale(by: rhs)
