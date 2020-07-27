@@ -47,8 +47,8 @@ extension CGPoint {
     public static func * (lhs: Double, rhs: CGPoint) -> CGPoint
 
     // Equivalent to `scale(by:)` above.
-    public static func *= (lhs: inout CGPointCGPoint, rhs: CGFloat)
-    public static func *= (lhs: inout CGPointCGPoint, rhs: Double)
+    public static func *= (lhs: inout CGPoint, rhs: CGFloat)
+    public static func *= (lhs: inout CGPoint, rhs: Double)
 
 }
 ```
