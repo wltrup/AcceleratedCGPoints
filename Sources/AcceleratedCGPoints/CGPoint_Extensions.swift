@@ -47,8 +47,8 @@ extension CGPoint {
 
     /// Multiplication of a scalar and a point.
     /// Equivalent to `scale(by:)` above.
-    public static func *= <T: BinaryFloatingPoint> (lhs: inout Self, rhs: T) {
-        lhs.scale(by: rhs)
+    public static func *= <T: BinaryFloatingPoint> (lhs: inout Self, s: T) {
+        lhs.scale(by: s)
     }
 
 }

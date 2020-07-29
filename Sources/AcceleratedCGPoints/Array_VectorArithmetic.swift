@@ -5,11 +5,11 @@ extension Array: VectorArithmetic where Element == CGPoint {
 
     /// Multiplication of a single scalar and an array of points.
     /// Does nothing if `self` is an empty array.
-    public mutating func scale <T: BinaryFloatingPoint> (by rhs: T) {
+    public mutating func scale <T: BinaryFloatingPoint> (by s: T) {
         if self.isEmpty { return }
         self.withUnsafeMutableBytes { selfBuffer in
             var selfTypedBuffer = selfBuffer.bindMemory(to: Double.self)
-            vDSP.multiply(Double(rhs), selfTypedBuffer, result: &selfTypedBuffer)
+            vDSP.multiply(Double(s), selfTypedBuffer, result: &selfTypedBuffer)
         }
     }
 
@@ -41,8 +41,8 @@ extension Array where Element == CGPoint {
     /// Multiplication of a single scalar and an array of points.
     /// Equivalent to `scale(by:)` above.
     /// Does nothing if `lhs` is an empty array.
-    public static func *= <T: BinaryFloatingPoint> (lhs: inout Self, rhs: T) {
-        lhs.scale(by: rhs)
+    public static func *= <T: BinaryFloatingPoint> (lhs: inout Self, s: T) {
+        lhs.scale(by: s)
     }
 
     /// Performs the operations

@@ -42,7 +42,7 @@ extension CGPoint {
     // Multiplication of a scalar and a point.
     // Equivalent to `scale(by:)` above.
     public static func *  <T: BinaryFloatingPoint> (lhs: T, rhs: CGPoint) -> CGPoint
-    public static func *= <T: BinaryFloatingPoint> (lhs: inout CGPoint, rhs: T)
+    public static func *= <T: BinaryFloatingPoint> (lhs: inout CGPoint, s: T)
 
 }
 ```
@@ -87,7 +87,7 @@ extension Array: VectorArithmetic where Element == CGPoint {
 
     // Multiplication of a single scalar and an array of points.
     // Does nothing if `self` is an empty array.
-    public mutating func scale <T: BinaryFloatingPoint> (by rhs: T)
+    public mutating func scale <T: BinaryFloatingPoint> (by s: T)
 
     // Returns 0 if `self` is an empty array.
     public var magnitudeSquared: Double
@@ -104,7 +104,7 @@ extension Array where Element == CGPoint {
     // Multiplication of a single scalar and an array of points.
     // Equivalent to `scale(by:)` above.
     // Does nothing if `lhs` is an empty array.
-    public static func *= <T: BinaryFloatingPoint> (lhs: inout [CGPoint], rhs: T)
+    public static func *= <T: BinaryFloatingPoint> (lhs: inout [CGPoint], s: T)
 
     // Performs the operations
     //
