@@ -14,10 +14,10 @@
 // Addition and subtraction of points.
 extension CGPoint: AdditiveArithmetic {
 
-    public static func + (lhs: CGPoint, rhs: CGPoint) -> CGPoint
+    public static func +  (lhs: CGPoint, rhs: CGPoint) -> CGPoint
     public static func += (lhs: inout CGPoint, rhs: CGPoint)
 
-    public static func - (lhs: CGPoint, rhs: CGPoint) -> CGPoint
+    public static func -  (lhs: CGPoint, rhs: CGPoint) -> CGPoint
     public static func -= (lhs: inout CGPoint, rhs: CGPoint)
 
 }
@@ -27,8 +27,8 @@ extension CGPoint: AdditiveArithmetic {
 ```swift
 extension CGPoint: VectorArithmetic {
 
-    // Multiplication of a (Double) scalar and a point.
-    public mutating func scale(by rhs: Double)
+    // Multiplication of a scalar and a point.
+    public mutating func scale <T: BinaryFloatingPoint> (by s: T)
 
     public var magnitudeSquared: Double
 
@@ -39,16 +39,10 @@ extension CGPoint: VectorArithmetic {
 ```swift
 extension CGPoint {
 
-    // Multiplication of a (CGFloat) scalar and a point.
-    public mutating func scale(by rhs: CGFloat)
-
+    // Multiplication of a scalar and a point.
     // Equivalent to `scale(by:)` above.
-    public static func * (lhs: CGFloat, rhs: CGPoint) -> CGPoint
-    public static func * (lhs: Double, rhs: CGPoint) -> CGPoint
-
-    // Equivalent to `scale(by:)` above.
-    public static func *= (lhs: inout CGPoint, rhs: CGFloat)
-    public static func *= (lhs: inout CGPoint, rhs: Double)
+    public static func *  <T: BinaryFloatingPoint> (lhs: T, rhs: CGPoint) -> CGPoint
+    public static func *= <T: BinaryFloatingPoint> (lhs: inout CGPoint, rhs: T)
 
 }
 ```
@@ -58,17 +52,17 @@ extension CGPoint {
 extension CGPoint {
 
     // Same range for both components.
-    static func random(in range: ClosedRange<CGFloat>) -> CGPoint
-    static func random(in range: ClosedRange<Double>) -> CGPoint
+    public static func random <T> (in range: ClosedRange<T>) -> CGPoint
+    where T: BinaryFloatingPoint, T.RawSignificand: FixedWidthInteger
 
-    // A separate range for each component.
-    static func random(xRange: ClosedRange<CGFloat>, yRange: ClosedRange<CGFloat>) -> CGPoint
-    static func random(xRange: ClosedRange<Double>, yRange: ClosedRange<Double>) -> CGPoint
+    // A range for each component.
+    public static func random <T> (xRange: ClosedRange<T>, yRange: ClosedRange<T>) -> CGPoint
+    where T: BinaryFloatingPoint, T.RawSignificand: FixedWidthInteger
 
 }
 ```
 
-- extensions to `Array`, to support accelerated arithmetic on large `CGPoint` arrays, using Apple's `Accelerate` framework
+- extensions to `Array`, to support accelerated arithmetic on large `CGPoint` arrays, using Apple's `Accelerate` framework:
 
 ```swift
 // Addition and subtraction of arrays of points.
@@ -89,11 +83,11 @@ extension Array: AdditiveArithmetic where Element == CGPoint {
 
 }
 
-// Multiplication of a single scalar and an array of points.
 extension Array: VectorArithmetic where Element == CGPoint {
 
+    // Multiplication of a single scalar and an array of points.
     // Does nothing if `self` is an empty array.
-    public mutating func scale(by rhs: Double)
+    public mutating func scale <T: BinaryFloatingPoint> (by rhs: T)
 
     // Returns 0 if `self` is an empty array.
     public var magnitudeSquared: Double
@@ -102,20 +96,15 @@ extension Array: VectorArithmetic where Element == CGPoint {
 
 extension Array where Element == CGPoint {
 
-    // Does nothing if `self` is an empty array.
-    public mutating func scale(by rhs: CGFloat)
-
     // Multiplication of a single scalar and an array of points.
     // Equivalent to `scale(by:)` above.
     // Does nothing if `rhs` is an empty array.
-    public static func * (lhs: CGFloat, rhs: [CGPoint]) -> [CGPoint]
-    public static func * (lhs: Double,  rhs: [CGPoint]) -> [CGPoint]
+    public static func * <T: BinaryFloatingPoint> (lhs: T, rhs: [CGPoint]) -> [CGPoint]
 
     // Multiplication of a single scalar and an array of points.
     // Equivalent to `scale(by:)` above.
     // Does nothing if `lhs` is an empty array.
-    public static func *= (lhs: inout [CGPoint], rhs: CGFloat)
-    public static func *= (lhs: inout [CGPoint], rhs: Double)
+    public static func *= <T: BinaryFloatingPoint> (lhs: inout [CGPoint], rhs: T)
 
     // Performs the operations
     //
@@ -170,7 +159,25 @@ extension Array where Element == CGPoint {
 }
 ```
 
-## Performance
+- an extension to `Array` to support creating arrays of uniformly-distributed pseudo-random points:
+
+```swift
+extension Array where Element == CGPoint {
+
+    // Returns an array of `count` random points whose coordinates are uniformly-distributed
+    // pseudo-random numbers in the given range.
+    public static func random <T> (count: Int, in range: ClosedRange<T>) -> [CGPoint]
+    where T: BinaryFloatingPoint, T.RawSignificand: FixedWidthInteger
+
+    // Returns an array of `count` random points whose `x` and `y` coordinates are uniformly-distributed
+    // pseudo-random numbers in the ranges `xRange` and `yRange`, respectively.
+    public static func random <T> (count: Int, xRange: ClosedRange<T>, yRange: ClosedRange<T>) -> [CGPoint]
+    where T: BinaryFloatingPoint, T.RawSignificand: FixedWidthInteger
+
+}
+```
+
+## Performance of `[CGPoint]` implementations
 
 Typical results when comparing the speeds of these operations (on an old 2012 MacBook Pro) against typical `forEach` or `map` implementations, on arrays of 1_000_000 points, appear below:
 

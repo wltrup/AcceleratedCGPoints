@@ -6,24 +6,39 @@ final class Array_AdditiveArithmeticTests: XCTestCase {
     var a1 = [CGPoint.zero]
     var a2 = [CGPoint.zero]
 
-    func makePointsArray(count: Int) -> [CGPoint] {
-        (1 ... count).map { _ in
-            CGPoint(
-                x: CGFloat.random(in: -1...1),
-                y: CGFloat.random(in: -1...1)
-            )
-        }
+    func randomPoint() -> CGPoint {
+        CGPoint(
+            x: CGFloat.random(in: -1...1),
+            y: CGFloat.random(in: -1...1)
+        )
+    }
+
+    func randomArray(count: Int) -> [CGPoint] {
+        (1 ... count).map { _ in randomPoint() }
     }
 
     override func setUp() {
         let count = 1_000
-        a1 = makePointsArray(count: count)
-        a2 = makePointsArray(count: count)
+        a1 = randomArray(count: count)
+        a2 = randomArray(count: count)
+    }
+
+    func test_plus_empty() {
+        let exp: [CGPoint] = []
+        let res = exp + exp
+        XCTAssertEqual(res, exp)
     }
 
     func test_plus() {
         let exp = zip(a1, a2).map(+)
         let res = a1 + a2
+        XCTAssertEqual(res, exp)
+    }
+
+    func test_plusEqual_empty() {
+        let exp: [CGPoint] = []
+        var res = exp
+        res += exp
         XCTAssertEqual(res, exp)
     }
 
@@ -34,9 +49,22 @@ final class Array_AdditiveArithmeticTests: XCTestCase {
         XCTAssertEqual(res, exp)
     }
 
+    func test_minus_empty() {
+        let exp: [CGPoint] = []
+        let res = exp - exp
+        XCTAssertEqual(res, exp)
+    }
+
     func test_minus() {
         let exp = zip(a1, a2).map(-)
         let res = a1 - a2
+        XCTAssertEqual(res, exp)
+    }
+
+    func test_minusEqual_empty() {
+        let exp: [CGPoint] = []
+        var res = exp
+        res -= exp
         XCTAssertEqual(res, exp)
     }
 
@@ -50,8 +78,8 @@ final class Array_AdditiveArithmeticTests: XCTestCase {
     func test_performance_plus() {
 
         let count = 100_000
-        a1 = makePointsArray(count: count)
-        a2 = makePointsArray(count: count)
+        a1 = randomArray(count: count)
+        a2 = randomArray(count: count)
         let pairs = zip(a1, a2)
 
         var start = Date()
@@ -74,8 +102,8 @@ final class Array_AdditiveArithmeticTests: XCTestCase {
     func test_performance_plusEqual() {
 
         let count = 100_000
-        a1 = makePointsArray(count: count)
-        a2 = makePointsArray(count: count)
+        a1 = randomArray(count: count)
+        a2 = randomArray(count: count)
         let pairs = zip(a1, a2)
 
         var start = Date()
@@ -102,8 +130,8 @@ final class Array_AdditiveArithmeticTests: XCTestCase {
     func test_performance_minus() {
 
         let count = 100_000
-        a1 = makePointsArray(count: count)
-        a2 = makePointsArray(count: count)
+        a1 = randomArray(count: count)
+        a2 = randomArray(count: count)
         let pairs = zip(a1, a2)
 
         var start = Date()
@@ -126,8 +154,8 @@ final class Array_AdditiveArithmeticTests: XCTestCase {
     func test_performance_minusEqual() {
 
         let count = 100_000
-        a1 = makePointsArray(count: count)
-        a2 = makePointsArray(count: count)
+        a1 = randomArray(count: count)
+        a2 = randomArray(count: count)
         let pairs = zip(a1, a2)
 
         var start = Date()

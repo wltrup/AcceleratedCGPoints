@@ -5,11 +5,11 @@ extension Array: VectorArithmetic where Element == CGPoint {
 
     /// Multiplication of a single scalar and an array of points.
     /// Does nothing if `self` is an empty array.
-    public mutating func scale(by rhs: Double) {
+    public mutating func scale <T: BinaryFloatingPoint> (by rhs: T) {
         if self.isEmpty { return }
         self.withUnsafeMutableBytes { selfBuffer in
             var selfTypedBuffer = selfBuffer.bindMemory(to: Double.self)
-            vDSP.multiply(rhs, selfTypedBuffer, result: &selfTypedBuffer)
+            vDSP.multiply(Double(rhs), selfTypedBuffer, result: &selfTypedBuffer)
         }
     }
 
@@ -28,25 +28,10 @@ extension Array: VectorArithmetic where Element == CGPoint {
 
 extension Array where Element == CGPoint {
 
-    /// Does nothing if `self` is an empty array.
-    public mutating func scale(by rhs: CGFloat) {
-        self.scale(by: Double(rhs))
-    }
-
     /// Multiplication of a single scalar and an array of points.
     /// Equivalent to `scale(by:)` above.
     /// Does nothing if `rhs` is an empty array.
-    public static func * (lhs: CGFloat, rhs: Self) -> Self {
-        if rhs.isEmpty { return rhs }
-        var res = rhs
-        res.scale(by: lhs)
-        return res
-    }
-
-    /// Multiplication of a single scalar and an array of points.
-    /// Equivalent to `scale(by:)` above.
-    /// Does nothing if `rhs` is an empty array.
-    public static func * (lhs: Double, rhs: Self) -> Self {
+    public static func * <T: BinaryFloatingPoint> (lhs: T, rhs: Self) -> Self {
         if rhs.isEmpty { return rhs }
         var res = rhs
         res.scale(by: lhs)
@@ -56,14 +41,7 @@ extension Array where Element == CGPoint {
     /// Multiplication of a single scalar and an array of points.
     /// Equivalent to `scale(by:)` above.
     /// Does nothing if `lhs` is an empty array.
-    public static func *= (lhs: inout Self, rhs: CGFloat) {
-        lhs.scale(by: rhs)
-    }
-
-    /// Multiplication of a single scalar and an array of points.
-    /// Equivalent to `scale(by:)` above.
-    /// Does nothing if `lhs` is an empty array.
-    public static func *= (lhs: inout Self, rhs: Double) {
+    public static func *= <T: BinaryFloatingPoint> (lhs: inout Self, rhs: T) {
         lhs.scale(by: rhs)
     }
 
@@ -215,6 +193,26 @@ extension Array where Element == CGPoint {
             }
         }
 
+    }
+
+}
+
+extension Array where Element == CGPoint {
+
+    /// Returns an array of `count` random points whose coordinates are uniformly-distributed
+    /// pseudo-random numbers in the given range.
+    public static func random <T> (count: Int, in range: ClosedRange<T>) -> Self
+    where T: BinaryFloatingPoint, T.RawSignificand: FixedWidthInteger {
+        guard count > 0 else { return [] }
+        return (1...count).map { _ in CGPoint.random(in: range) }
+    }
+
+    /// Returns an array of `count` random points whose `x` and `y` coordinates are uniformly-distributed
+    /// pseudo-random numbers in the ranges `xRange` and `yRange`, respectively.
+    public static func random <T> (count: Int, xRange: ClosedRange<T>, yRange: ClosedRange<T>) -> Self
+    where T: BinaryFloatingPoint, T.RawSignificand: FixedWidthInteger {
+        guard count > 0 else { return [] }
+        return (1...count).map { _ in CGPoint.random(xRange: xRange, yRange: yRange) }
     }
 
 }

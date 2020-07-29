@@ -5,7 +5,7 @@ import enum Accelerate.vDSP
 extension Array: AdditiveArithmetic where Element == CGPoint {
 
     /// **NOTE**: `.zero` is an array of length 1.
-    public static let zero: [CGPoint] = [.zero]
+    public static let zero: Self = [.zero]
 
     /// Returns an empty array if the arguments are empty arrays.
     /// **NOTE**: crashes if the arguments are of different lengths.

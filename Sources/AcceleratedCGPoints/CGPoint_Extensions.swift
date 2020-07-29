@@ -25,10 +25,10 @@ extension CGPoint: AdditiveArithmetic {
 
 extension CGPoint: VectorArithmetic {
 
-    /// Multiplication of a (Double) scalar and a point.
-    public mutating func scale(by rhs: Double) {
-        x *= CGFloat(rhs)
-        y *= CGFloat(rhs)
+    /// Multiplication of a scalar and a point.
+    public mutating func scale <T: BinaryFloatingPoint> (by s: T) {
+        x *= CGFloat(s)
+        y *= CGFloat(s)
     }
 
     public var magnitudeSquared: Double {
@@ -39,33 +39,15 @@ extension CGPoint: VectorArithmetic {
 
 extension CGPoint {
 
-    /// Multiplication of a (CGFloat) scalar and a point.
-    public mutating func scale(by rhs: CGFloat) {
-        self.x *= rhs
-        self.y *= rhs
-    }
-
-    /// Multiplication of a (CGFloat) scalar and a point.
+    /// Multiplication of a scalar and a point.
     /// Equivalent to `scale(by:)` above.
-    public static func * (lhs: CGFloat, rhs: Self) -> Self {
-        CGPoint(x: lhs * rhs.x, y: lhs * rhs.y)
-    }
-
-    /// Multiplication of a (Double) scalar and a point.
-    /// Equivalent to `scale(by:)` above.
-    public static func * (lhs: Double, rhs: Self) -> Self {
+    public static func * <T: BinaryFloatingPoint> (lhs: T, rhs: Self) -> Self {
         CGPoint(x: CGFloat(lhs) * rhs.x, y: CGFloat(lhs) * rhs.y)
     }
 
-    /// Multiplication of a (CGFloat) scalar and a point.
+    /// Multiplication of a scalar and a point.
     /// Equivalent to `scale(by:)` above.
-    public static func *= (lhs: inout Self, rhs: CGFloat) {
-        lhs.scale(by: rhs)
-    }
-
-    /// Multiplication of a (Double) scalar and a point.
-    /// Equivalent to `scale(by:)` above.
-    public static func *= (lhs: inout Self, rhs: Double) {
+    public static func *= <T: BinaryFloatingPoint> (lhs: inout Self, rhs: T) {
         lhs.scale(by: rhs)
     }
 
@@ -73,24 +55,16 @@ extension CGPoint {
 
 extension CGPoint {
 
-    /// Same (CGFloat) range for both components.
-    static func random(in range: ClosedRange<CGFloat>) -> CGPoint {
-        CGPoint(x: .random(in: range), y: .random(in: range))
+    /// Same range for both components.
+    public static func random <T> (in range: ClosedRange<T>) -> CGPoint
+    where T: BinaryFloatingPoint, T.RawSignificand: FixedWidthInteger {
+        CGPoint(x: CGFloat(T.random(in: range)), y: CGFloat(T.random(in: range)))
     }
 
-    /// Same (Double) range for both components.
-    static func random(in range: ClosedRange<Double>) -> CGPoint {
-        CGPoint(x: .random(in: range), y: .random(in: range))
-    }
-
-    /// A separate (CGFloat) range for each component.
-    static func random(xRange: ClosedRange<CGFloat>, yRange: ClosedRange<CGFloat>) -> CGPoint {
-        CGPoint(x: .random(in: xRange), y: .random(in: yRange))
-    }
-
-    /// A separate (Double) range for each component.
-    static func random(xRange: ClosedRange<Double>, yRange: ClosedRange<Double>) -> CGPoint {
-        CGPoint(x: .random(in: xRange), y: .random(in: yRange))
+    /// A range for each component.
+    public static func random <T> (xRange: ClosedRange<T>, yRange: ClosedRange<T>) -> CGPoint
+    where T: BinaryFloatingPoint, T.RawSignificand: FixedWidthInteger {
+        CGPoint(x: CGFloat(T.random(in: xRange)), y: CGFloat(T.random(in: yRange)))
     }
 
 }
