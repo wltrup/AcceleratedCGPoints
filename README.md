@@ -10,6 +10,7 @@
 **AcceleratedCGPoints** is a Swift Package Manager library for iOS/tvOS (13.0 and above), watchOS (6.0 and above), and macOS (10.15 and above), under Swift 5.2 and above, providing
 
 - a conformance of `CGPoint` to `AdditiveArithmetic`, to support direct arithmetic operations on points:
+
 ```swift
 // Addition and subtraction of points.
 extension CGPoint: AdditiveArithmetic {
@@ -24,6 +25,7 @@ extension CGPoint: AdditiveArithmetic {
 ```
 
 - a conformance of `CGPoint` to `VectorArithmetic`, to support multiplication of points by scalars:
+
 ```swift
 extension CGPoint: VectorArithmetic {
 
@@ -36,6 +38,7 @@ extension CGPoint: VectorArithmetic {
 ```
 
 - an extension of `CGPoint`, adding some convenience functions to go along with the conformance to `VectorArithmetic`:
+
 ```swift
 extension CGPoint {
 
@@ -48,6 +51,7 @@ extension CGPoint {
 ```
 
 - another extension of `CGPoint`, adding support for creating uniformly-distributed pseudo-random points:
+
 ```swift
 extension CGPoint {
 
@@ -224,10 +228,6 @@ Typical results when comparing the speeds of these operations (on an old 2012 Ma
 ## Installation
 
 **AcceleratedCGPoints** is provided only as a Swift Package Manager package, because I'm moving away from CocoaPods and Carthage, and can be easily installed directly from Xcode.
-
-## Author
-
-Wagner Truppel, trupwl@gmail.com
 
 ## License
 
